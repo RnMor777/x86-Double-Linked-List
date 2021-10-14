@@ -3,6 +3,9 @@ segment .data
     printform2      db  "%d", 10, 0
     scanformat      db  "%d", 0
     printNl         db  10, 0
+    header1         db  "- Forward -------------------------", 10, 0
+    header2         db  "- Reverse -------------------------", 10, 0
+    footer          db  "-----------------------------------", 10, 0
 
 segment .bss
     dllPointer      resd    1    
@@ -35,45 +38,29 @@ main:
         add     esp, 8
         jmp     topScan
     endScan:
-    jmp     bot
 
-
-    push    10 
-    push    DWORD[dllPointer]
-    ;call    insertSorted
-    ;call    insertBack
-    call    insertFront
-    add     esp, 8
-
-    push    14
-    push    DWORD[dllPointer]
-    ;call    insertSorted
-    ;call    insertBack
-    call    insertFront
-    add     esp, 8
-
-    push    12
-    push    DWORD[dllPointer]
-    ;call    insertSorted
-    ;call    insertBack
-    call    insertFront
-    add     esp, 8
-
-    push    30
-    push    DWORD[dllPointer]
-    ;call    insertSorted
-    ;call    insertBack
-    call    insertFront
-    add     esp, 8
-
-bot:
+    push    header1
+    call    printf
+    add     esp, 4
 
     push    DWORD[dllPointer]
     call    printerF
     add     esp, 4
 
+    push    footer
+    call    printf
+    add     esp, 4
+
+    push    header2
+    call    printf
+    add     esp, 4
+
     push    DWORD[dllPointer]
     call    printerR
+    add     esp, 4
+
+    push    footer
+    call    printf
     add     esp, 4
 
     popa
@@ -354,10 +341,6 @@ printerR: ; void printerR (struct dllheader *alist)
         mov     DWORD[ebp-4], eax
         jmp     printRTop
     printRBot: 
-
-    push    printNl
-    call    printf
-    add     esp, 4
 
     mov     esp, ebp
     pop     ebp
